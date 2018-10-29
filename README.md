@@ -10,6 +10,8 @@
 
 Aplikacja dostępna pod adresem `http://localhost:8080`
 
+Dostęp do bazy H2 pod adresem `http://localhost:8080/h2console` (URL: `jdbc:h2:mem:testdb`, user: `sa`)
+
 ### Autorzy
 * Kacper Maciejewski
 * Paweł Myszkowski

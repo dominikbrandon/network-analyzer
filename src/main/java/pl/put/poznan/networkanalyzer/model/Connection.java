@@ -14,15 +14,9 @@ import java.io.Serializable;
 @Table(name = "CONNECTIONS")
 public class Connection implements Serializable {
 
+    @EmbeddedId
+    private ConnectionId id;
+
+    @Column(nullable = false)
     private int value;
-
-    @Id
-    @ManyToOne
-    @JoinColumn(name = "ID")
-    private Node from;
-
-    @Id
-    @ManyToOne
-    @JoinColumn(name = "ID")
-    private Node to;
 }

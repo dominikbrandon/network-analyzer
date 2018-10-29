@@ -16,7 +16,6 @@ import java.util.List;
 public class Node implements Serializable {
 
     @Id
-    @Column(name = "ID")
     private Long id;
 
     private String name;
