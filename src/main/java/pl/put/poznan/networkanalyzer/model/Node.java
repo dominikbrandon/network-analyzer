@@ -1,12 +1,12 @@
 package pl.put.poznan.networkanalyzer.model;
 
-import javax.persistence.*;
-import java.io.Serializable;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-import pl.put.poznan.networkanalyzer.model.NodeType;
-import java.util.ArrayList;
+
+import javax.persistence.*;
+import java.io.Serializable;
+import java.util.List;
 
 @Getter
 @Setter
@@ -14,19 +14,20 @@ import java.util.ArrayList;
 @Entity
 @Table(name = "NODES")
 public class Node implements Serializable {
-	@Id
-	@Column(name = "ID")
-	int id;
-	@Column(name = "NAME")
-	String name;
-	@Column(name = "TYPE")
-	NodeType type;
 
-	@Column(name = "OUTGOING")
-	@OneToMany(mappedBy = "FROM")
-	ArrayList outgoing = new ArrayList();
-	@Column(name = "INCOMING")
-	@OneToMany(mappedBy = "TO")	
-	ArrayList incoming = new ArrayList();	
+    @Id
+    @Column(name = "ID")
+    private Long id;
+
+    private String name;
+
+    @Column(nullable = false)
+    private NodeType type;
+
+    @OneToMany(mappedBy = "id")
+    private List<Node> outgoing;
+
+    @OneToMany(mappedBy = "id")
+    private List<Node> incoming;
 }
 

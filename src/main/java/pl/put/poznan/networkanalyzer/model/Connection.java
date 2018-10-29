@@ -1,11 +1,11 @@
 package pl.put.poznan.networkanalyzer.model;
 
-import javax.persistence.*;
-import java.io.Serializable;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-import pl.put.poznan.networkanalyzer.model.Node;
+
+import javax.persistence.*;
+import java.io.Serializable;
 
 @Getter
 @Setter
@@ -13,19 +13,16 @@ import pl.put.poznan.networkanalyzer.model.Node;
 @Entity
 @Table(name = "CONNECTIONS")
 public class Connection implements Serializable {
-	@Id 
-	@Column(name = "FROM")
-	@ManyToOne
-	@JoinColumn(name = "ID")	
-	Node from;
 
-	@Id 
-	@Column(name = "TO")
-	@ManyToOne
-	@JoinColumn(name = "ID")
-	Node to;
+    private int value;
 
-	@Id 
-	@Column(name = "VALUE")
-	int value;
+    @Id
+    @ManyToOne
+    @JoinColumn(name = "ID")
+    private Node from;
+
+    @Id
+    @ManyToOne
+    @JoinColumn(name = "ID")
+    private Node to;
 }
