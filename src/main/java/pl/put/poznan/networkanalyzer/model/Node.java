@@ -1,5 +1,6 @@
 package pl.put.poznan.networkanalyzer.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -24,9 +25,11 @@ public class Node implements Serializable {
     private NodeType type;
 
     @OneToMany(mappedBy = "id")
+    @JsonIgnore
     private List<Node> outgoing;
 
     @OneToMany(mappedBy = "id")
+    @JsonIgnore
     private List<Node> incoming;
 }
 
