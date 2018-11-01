@@ -1,8 +1,6 @@
 package pl.put.poznan.networkanalyzer.model;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.Embeddable;
 import javax.persistence.JoinColumn;
@@ -13,6 +11,8 @@ import java.io.Serializable;
 @Getter
 @Setter
 @EqualsAndHashCode
+@NoArgsConstructor
+@AllArgsConstructor
 public class ConnectionId implements Serializable {
 
     @ManyToOne
