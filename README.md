@@ -10,7 +10,11 @@
 
 Aplikacja dostępna pod adresem `http://localhost:8080`
 
+## Baza H2
 Dostęp do bazy H2 pod adresem `http://localhost:8080/h2console` (URL: `jdbc:h2:mem:testdb`, user: `sa`)
+
+## Dokumentacja API
+`http://localhost:8080/swagger-ui.html`
 
 ### Autorzy
 * Kacper Maciejewski

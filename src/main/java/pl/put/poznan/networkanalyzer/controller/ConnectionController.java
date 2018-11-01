@@ -4,11 +4,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import pl.put.poznan.networkanalyzer.model.Connection;
+import pl.put.poznan.networkanalyzer.model.ConnectionDto;
 import pl.put.poznan.networkanalyzer.model.ConnectionId;
 import pl.put.poznan.networkanalyzer.model.Node;
 import pl.put.poznan.networkanalyzer.persistence.ConnectionRepository;
 import pl.put.poznan.networkanalyzer.persistence.NodeRepository;
 
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 @RestController
@@ -33,35 +36,40 @@ public class ConnectionController {
         } else if (toId == null) {
             return connectionRepository.findById_From_Id(fromId);
         } else {
-            return connectionRepository.findById_From_IdAndId_To_Id(fromId, toId);
+            ConnectionId connId = getConnectionIdFromNodesIds(fromId, toId);
+            return Collections.singletonList(connectionRepository.getOne(connId));
         }
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void saveAll(@RequestBody List<Connection> connections) {
-        connections.forEach(connection -> {
-            ConnectionId connId = connection.getId();
-            if (connId != null && connectionRepository.existsById(connId)) {
-                throw new RuntimeException("Connection between these nodes already exists: " + connId.getFrom().getId() + " " + connId.getTo().getId());
-            }
+    public void saveAll(@RequestBody List<ConnectionDto> connectionDtos) {
+        List<Connection> connections = new LinkedList<>();
+        connectionDtos.forEach(connectionDto -> {
+            ConnectionId connId = getConnectionIdFromNodesIds(connectionDto.getFrom(), connectionDto.getTo());
+            connections.add(new Connection(connId, connectionDto.getValue()));
         });
         connectionRepository.saveAll(connections);
     }
 
     @PutMapping(value = "/{from}/{to}")
-    public void update(@PathVariable("from") Long fromId, @PathVariable("to") Long toId, @RequestBody Connection updatedConnection) {
-        Node fromNode = nodeRepository.getOne(fromId);
-        Node toNode = nodeRepository.getOne(toId);
-        updatedConnection.setId(new ConnectionId(fromNode, toNode));
-        connectionRepository.save(updatedConnection);
+    public void update(@PathVariable("from") Long fromId, @PathVariable("to") Long toId,
+                       @RequestBody ConnectionDto connectionDto) {
+        ConnectionId connId = getConnectionIdFromNodesIds(fromId, toId);
+        Connection connection = connectionRepository.getOne(connId);
+        connection.setValue(connectionDto.getValue());
+        connectionRepository.save(connection);
     }
 
     @DeleteMapping(value = "/{from}/{to}")
     public void delete(@PathVariable("from") Long fromId, @PathVariable("to") Long toId) {
+        ConnectionId connId = getConnectionIdFromNodesIds(fromId, toId);
+        connectionRepository.deleteById(connId);
+    }
+
+    private ConnectionId getConnectionIdFromNodesIds(Long fromId, Long toId) {
         Node fromNode = nodeRepository.getOne(fromId);
         Node toNode = nodeRepository.getOne(toId);
-        ConnectionId connId = new ConnectionId(fromNode, toNode);
-        connectionRepository.deleteById(connId);
+        return new ConnectionId(fromNode, toNode);
     }
 }

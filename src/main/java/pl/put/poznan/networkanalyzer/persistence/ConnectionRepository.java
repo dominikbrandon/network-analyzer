@@ -13,6 +13,4 @@ public interface ConnectionRepository extends JpaRepository<Connection, Connecti
     List<Connection> findById_From_Id(Long fromId);
 
     List<Connection> findById_To_Id(Long toId);
-
-    List<Connection> findById_From_IdAndId_To_Id(Long fromId, Long toId);
 }
