@@ -30,11 +30,14 @@ public class NodeController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void save(@RequestBody Node node) {
-        if (node.getId() != null && nodeRepository.existsById(node.getId())) {
-            throw new RuntimeException("Node with given ID already exists: " + node.getId());
-        }
-        nodeRepository.save(node);
+    public void saveAll(@RequestBody List<Node> nodes) {
+        nodes.forEach(node -> {
+            Long nodeId = node.getId();
+            if (nodeId != null && nodeRepository.existsById(nodeId)) {
+                throw new RuntimeException("Node with given ID already exists: " + nodeId);
+            }
+        });
+        nodeRepository.saveAll(nodes);
     }
 
     @PutMapping(value = "/{id}")
