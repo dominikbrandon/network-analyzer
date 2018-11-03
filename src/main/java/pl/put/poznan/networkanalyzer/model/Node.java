@@ -1,6 +1,7 @@
 package pl.put.poznan.networkanalyzer.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,6 +15,7 @@ import java.util.List;
 @EqualsAndHashCode
 @Entity
 @Table(name = "NODES")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})  // lazy serialization workaround
 public class Node implements Serializable {
 
     @Id
