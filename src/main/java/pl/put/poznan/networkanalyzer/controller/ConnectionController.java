@@ -9,8 +9,9 @@ import pl.put.poznan.networkanalyzer.model.ConnectionId;
 import pl.put.poznan.networkanalyzer.model.Node;
 import pl.put.poznan.networkanalyzer.persistence.ConnectionRepository;
 import pl.put.poznan.networkanalyzer.persistence.NodeRepository;
+import pl.put.poznan.networkanalyzer.searching.ConnectionSearchParameters;
+import pl.put.poznan.networkanalyzer.searching.ConnectionSpecification;
 
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -29,16 +30,7 @@ public class ConnectionController {
     @GetMapping
     public List<Connection> findAll(@RequestParam(value = "from", required = false) Long fromId,
                                     @RequestParam(value = "to", required = false) Long toId) {
-        if (fromId == null && toId == null) {
-            return connectionRepository.findAll();
-        } else if (fromId == null) {
-            return connectionRepository.findById_To_Id(toId);
-        } else if (toId == null) {
-            return connectionRepository.findById_From_Id(fromId);
-        } else {
-            ConnectionId connId = getConnectionIdFromNodesIds(fromId, toId);
-            return Collections.singletonList(connectionRepository.getOne(connId));
-        }
+        return connectionRepository.findAll(new ConnectionSpecification(new ConnectionSearchParameters(fromId, toId)));
     }
 
     @PostMapping
