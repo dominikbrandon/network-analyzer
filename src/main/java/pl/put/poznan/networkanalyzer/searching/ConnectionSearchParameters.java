@@ -1,12 +1,11 @@
-package pl.put.poznan.networkanalyzer.model;
+package pl.put.poznan.networkanalyzer.searching;
 
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @AllArgsConstructor
-public class ConnectionDto {
+public class ConnectionSearchParameters {
     public Long from;
     public Long to;
-    public int value;
 }
