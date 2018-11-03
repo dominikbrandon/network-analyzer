@@ -4,50 +4,43 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import pl.put.poznan.networkanalyzer.model.Node;
-import pl.put.poznan.networkanalyzer.persistence.NodeRepository;
+import pl.put.poznan.networkanalyzer.service.NodeService;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/nodes")
 public class NodeController {
-    private NodeRepository nodeRepository;
+    private NodeService nodeService;
 
     @Autowired
-    public NodeController(NodeRepository nodeRepository) {
-        this.nodeRepository = nodeRepository;
+    public NodeController(NodeService nodeService) {
+        this.nodeService = nodeService;
     }
 
     @GetMapping
-    public List<Node> findAll() {
-        return nodeRepository.findAll();
+    public List<Node> getAll() {
+        return nodeService.getAll();
     }
 
     @GetMapping(value = "/{id}")
-    public Node getOne(@PathVariable("id") Long nodeId) {
-        return nodeRepository.getOne(nodeId);
+    public Node getById(@PathVariable("id") Long nodeId) {
+        return nodeService.getById(nodeId);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public void saveAll(@RequestBody List<Node> nodes) {
-        nodes.forEach(node -> {
-            Long nodeId = node.getId();
-            if (nodeId != null && nodeRepository.existsById(nodeId)) {
-                throw new RuntimeException("Node with given ID already exists: " + nodeId);
-            }
-        });
-        nodeRepository.saveAll(nodes);
+        nodeService.saveAll(nodes);
     }
 
     @PutMapping(value = "/{id}")
-    public void update(@PathVariable("id") Long nodeId, Node updatedNode) {
-        updatedNode.setId(nodeId);
-        nodeRepository.save(updatedNode);
+    public void update(@PathVariable("id") Long nodeId, @RequestBody Node updatedNode) {
+        nodeService.update(nodeId, updatedNode);
     }
 
     @DeleteMapping(value = "/{id}")
     public void deleteById(@PathVariable("id") Long nodeId) {
-        nodeRepository.deleteById(nodeId);
+        nodeService.deleteById(nodeId);
     }
 }
