@@ -1,14 +1,12 @@
 package pl.put.poznan.networkanalyzer.model;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class ConnectionDto {
-    private Long from;
-    private Long to;
-    private int value;
+    public Long from;
+    public Long to;
+    public int value;
 }
