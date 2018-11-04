@@ -15,32 +15,71 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * The API for managing connections containing basic CRUD operations.
+ * Users should use this facade class instead of repositories directly.
+ *
+ * @author Dominik Grzelak
+ * @version 1.0
+ * @since 1.0
+ */
 @Service
 public class ConnectionService {
     private ConnectionRepository connectionRepository;
     private NodeRepository nodeRepository;
 
+    /**
+     * Creates a new instance of ConnectionService.
+     * @param connectionRepository repository of connections
+     * @param nodeRepository repository of nodes
+     */
     @Autowired
     public ConnectionService(ConnectionRepository connectionRepository, NodeRepository nodeRepository) {
         this.connectionRepository = connectionRepository;
         this.nodeRepository = nodeRepository;
     }
 
+    /**
+     * Returns list of all connections.
+     * @return never null
+     */
     public List<Connection> getAll() {
         return connectionRepository.findAll();
     }
 
+    /**
+     * Returns list of all connections that match search criteria.
+     * @param searchParameters search criteria, null values are omitted
+     * @return never null
+     */
     public List<Connection> getBySearchParams(ConnectionSearchParameters searchParameters) {
         return connectionRepository.findAll(new ConnectionSpecification(searchParameters));
     }
 
+    /**
+     * Saves a single connection between two nodes given by their ids.
+     * @param connectionDto DTO of the connection
+     * @see ConnectionService#saveAll(List)
+     */
     public void save(ConnectionDto connectionDto) {
         saveAll(Collections.singletonList(connectionDto));
     }
 
+    /**
+     * Saves all connections given as DTOs.
+     * If any of below errors occurs, no connections will be saved.
+     * Please note that connected nodes must exist before creating connection between them.
+     * @param connectionDtos list of DTOs of connections to be saved
+     * @throws javax.persistence.EntityNotFoundException if nodes being connected don't exist
+     * @throws RuntimeException if nodes' ids are null
+     * @throws RuntimeException if connection already exists between nodes of given ids
+     */
     public void saveAll(List<ConnectionDto> connectionDtos) {
         List<Connection> connections = new LinkedList<>();
         connectionDtos.forEach(connectionDto -> {
+            if (connectionDto.from == null || connectionDto.to == null) {
+                throw new RuntimeException("Nodes ids must not be null");
+            }
             ConnectionId connId = createConnectionId(connectionDto.from, connectionDto.to);
             if (connectionRepository.existsById(connId)) {
                 throw new RuntimeException("Connection already exists between: " + connectionDto.from + " " + connectionDto.to);
@@ -50,13 +89,28 @@ public class ConnectionService {
         connectionRepository.saveAll(connections);
     }
 
+    /**
+     * Saves connection between nodes of ids given as parameters.
+     * Please note that it overrides existing connections as well.
+     * Also, nodes' ids given in DTO don't matter, as they are always overridden by values of params.
+     * @param fromId id of output node
+     * @param toId id of input node
+     * @param connectionDto DTO of connection being saved
+     * @throws javax.persistence.EntityNotFoundException if nodes being connected don't exist
+     */
     public void update(Long fromId, Long toId, ConnectionDto connectionDto) {
         ConnectionId connId = createConnectionId(fromId, toId);
-        Connection connection = connectionRepository.getOne(connId);
-        connection.setValue(connectionDto.value);
+        Connection connection = new Connection(connId, connectionDto.value);
         connectionRepository.save(connection);
     }
 
+    /**
+     * Deletes connection between two nodes.
+     * @param fromId id of output node
+     * @param toId if of input node
+     * @throws javax.persistence.EntityNotFoundException if nodes don't exist
+     * @throws org.springframework.dao.EmptyResultDataAccessException if connection between nodes doesn't exist
+     */
     public void delete(Long fromId, Long toId) {
         ConnectionId connId = createConnectionId(fromId, toId);
         connectionRepository.deleteById(connId);
