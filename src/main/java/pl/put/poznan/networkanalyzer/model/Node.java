@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -16,6 +17,7 @@ import java.util.List;
 @Entity
 @Table(name = "NODES")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})  // lazy serialization workaround
+@ToString
 public class Node implements Serializable {
 
     @Id
