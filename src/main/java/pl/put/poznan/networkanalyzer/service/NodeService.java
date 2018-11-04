@@ -31,7 +31,7 @@ public class NodeService {
 
     /**
      * Returns list of all nodes.
-     * @return list of all nodes in the repository
+     * @return never null
      */
     public List<Node> getAll() {
         return nodeRepository.findAll();
