@@ -1,5 +1,6 @@
 package pl.put.poznan.networkanalyzer.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.put.poznan.networkanalyzer.model.Node;
@@ -17,6 +18,7 @@ import java.util.List;
  * @since 1.0
  */
 @Service
+@Slf4j
 public class NodeService {
     private NodeRepository nodeRepository;
 
@@ -26,6 +28,7 @@ public class NodeService {
      */
     @Autowired
     public NodeService(NodeRepository nodeRepository) {
+        log.debug("Creating instance of NodeService");
         this.nodeRepository = nodeRepository;
     }
 
@@ -34,6 +37,7 @@ public class NodeService {
      * @return never null
      */
     public List<Node> getAll() {
+        log.debug("Getting all nodes");
         return nodeRepository.findAll();
     }
 
@@ -44,6 +48,7 @@ public class NodeService {
      * @throws javax.persistence.EntityNotFoundException if no node exists for a given id
      */
     public Node getById(Long nodeId) {
+        log.debug("Getting node by id: " + nodeId);
         return nodeRepository.getOne(nodeId);
     }
 
@@ -54,6 +59,7 @@ public class NodeService {
      * @throws RuntimeException if node with given id already exists in the repository
      */
     public void save(Node node) {
+        log.debug("Saving node: " + node.toString());
         saveAll(Collections.singletonList(node));
     }
 
@@ -66,6 +72,7 @@ public class NodeService {
      */
     public void saveAll(List<Node> nodes) {
         nodes.forEach(node -> {
+            log.debug("Checking id of node: " + node.toString());
             Long nodeId = node.getId();
             if (nodeId == null) {
                 throw new RuntimeException("Node id must not be null");
@@ -74,6 +81,7 @@ public class NodeService {
                 throw new RuntimeException("Node with given id already exists: " + nodeId);
             }
         });
+        log.debug("Saving all processed nodes");
         nodeRepository.saveAll(nodes);
     }
 
@@ -84,6 +92,7 @@ public class NodeService {
      * @param updatedNode node object to be saved
      */
     public void update(Long nodeId, Node updatedNode) {
+        log.debug("Updating node of id " + nodeId + " with the following: " + updatedNode.toString());
         updatedNode.setId(nodeId);
         nodeRepository.save(updatedNode);
     }
@@ -94,6 +103,7 @@ public class NodeService {
      * @throws org.springframework.dao.EmptyResultDataAccessException if node of a given id does not exist in the repository
      */
     public void deleteById(Long nodeId) {
+        log.debug("Deleting node of id: " + nodeId);
         nodeRepository.deleteById(nodeId);
     }
 }
