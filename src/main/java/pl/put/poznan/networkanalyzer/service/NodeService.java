@@ -8,6 +8,7 @@ import pl.put.poznan.networkanalyzer.persistence.NodeRepository;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * The API for managing nodes containing basic CRUD operations.
@@ -45,11 +46,15 @@ public class NodeService {
      * Returns node of a given identifier.
      * @param nodeId identifier of the node
      * @return node of a given identifier
-     * @throws javax.persistence.EntityNotFoundException if no node exists for a given id
+     * @throws RuntimeException if no node exists for a given id
      */
     public Node getById(Long nodeId) {
         log.debug("Getting node by id: " + nodeId);
-        return nodeRepository.getOne(nodeId);
+        Optional<Node> node = nodeRepository.findById(nodeId);
+        if (node.isPresent()) {
+            return node.get();
+        }
+        throw new RuntimeException("Node with a given id doesn't exist: " + nodeId);
     }
 
     /**

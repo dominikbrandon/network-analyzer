@@ -3,6 +3,7 @@ package pl.put.poznan.networkanalyzer.model;
 import lombok.*;
 
 import javax.persistence.Embeddable;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import java.io.Serializable;
@@ -15,11 +16,11 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class ConnectionId implements Serializable {
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "nodeOut")
     private Node from;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "nodeIn")
     private Node to;
 }
