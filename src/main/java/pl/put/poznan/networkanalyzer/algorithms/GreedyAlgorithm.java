@@ -54,15 +54,22 @@ public class GreedyAlgorithm {
         connectionService.saveAll(connectionDtos);
     }
     // ***************** TEMP *********************
-    class Outcome                           //just for storing result of finding next Node
+    class Outcome                                                       //for storing results of computing
     {
-        public Node   node;
-        public int    connectionValue;
-    };
+        public LinkedList<Node>   nodes = new LinkedList<Node>();   //I gave new LinkedList.. because without this I had NullPointerException
+        public int                connectionValue;
+
+    }
+
 
     public Node getEntry(){
         List<Node> listOfNodes = nodeService.getAll();
         Node entry = listOfNodes.get(1);
+
+        if (entry.getType()==NodeType.ENTRY){
+            return entry;
+        }
+
         for(int i=0 ; i< listOfNodes.size() ; i++) {
             entry = listOfNodes.get(i);
             if (entry.getType() == NodeType.ENTRY) {
@@ -82,46 +89,14 @@ public class GreedyAlgorithm {
             }
         }
         return exit;
-    };
+    }
 
-    public LinkedList<Node> getOutgoingNodes(Node examined){
-
-        List<Connection> listOfConnections = examined.getOutgoing();
-        LinkedList<Node> result = new LinkedList<Node>();
-        Connection con = new Connection();
-        ConnectionId conId = new ConnectionId();
-
-        for(int i = 0; i < listOfConnections.size(); i++){  //for every connection in listOfConnections get ConnectionId
-            con = listOfConnections.get(i);
-            conId = con.getId();
-            result.add(conId.getTo());
-        }
-
-        return  result;
-    };
-
-    public LinkedList<Node> getIncomingNodes(Node examined){
-
-        List<Connection> listOfConnections = examined.getIncoming();
-        LinkedList<Node> result = new LinkedList<Node>();
-        Connection con = new Connection();
-        ConnectionId conId = new ConnectionId();
-
-        for(int i = 0; i < listOfConnections.size(); i++){  //for every connection in listOfConnections get ConnectionId
-            con = listOfConnections.get(i);
-            conId = con.getId();
-            result.add(conId.getTo());
-        }
-
-        return  result;
-    };
 
     public Outcome getCheapestOutgoing(Node examined){
 
-        Outcome result = new Outcome();
         List<Connection> successors = examined.getOutgoing();       //make it royal
         Connection cheapest = successors.get(0);                    //initiate it with first connection
-        Connection comparing = new Connection();
+        Connection comparing;
 
         for(int i = 0; i < successors.size(); i++){
             comparing = successors.get(i);
@@ -132,7 +107,8 @@ public class GreedyAlgorithm {
 
         ConnectionId resultConnectionId = cheapest.getId();
 
-        result.node = resultConnectionId.getTo();
+        Outcome result = new Outcome();
+        result.nodes.add(resultConnectionId.getTo());
         result.connectionValue = cheapest.getValue();
         return result;
     }
@@ -140,21 +116,24 @@ public class GreedyAlgorithm {
 
     public LinkedList<Node> compute() {
         // stuff
-        int totalValue = 0;                                        //stores total cost of greedy Algorithm
-        Outcome actual = new Outcome();
-        LinkedList<Node> greedyResultNodes = new LinkedList<Node>();  //stores visited nodes
-
         Node first = getEntry();
         Node last = getExit();
-        actual = getCheapestOutgoing(first);                       //get first outgoing Node
-        greedyResultNodes.add(actual.node);
-        totalValue = totalValue + actual.connectionValue;
+        Outcome actualResult = new Outcome();           //greedyAlgorithm result will be stored here
+                actualResult.nodes.add(first);          //initiate it with first element (entry)
+                actualResult.connectionValue = 0;
+        Outcome nextNode ;                              //variable which will be holding next Node on the path
 
-        while(actual.node.getId() != last.getId()){         //while we haven't reached the exit Node get cheapest next Node
-            actual = getCheapestOutgoing(actual.node);
-            greedyResultNodes.add(actual.node);
-            totalValue = totalValue + actual.connectionValue;
+        while((actualResult.nodes.getLast()).getId() != last.getId()){     //while we haven't reached the exit Node get cheapest next Node
+            nextNode = getCheapestOutgoing(actualResult.nodes.getLast());
+            actualResult.connectionValue = actualResult.connectionValue + nextNode.connectionValue;
+            actualResult.nodes.add(nextNode.nodes.getFirst());
         }
+
+        //ToDo
+        // - create class Outcome in another file
+        // - add RuntimeException to getEntry() and getExit()
+        //ToDo - NEED HELP
+        //compute() should return actualResult
 
         return Lists.newLinkedList();
     }
