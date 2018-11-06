@@ -64,7 +64,7 @@ public class GreedyAlgorithm {
 
     public Node getEntry(){
         List<Node> listOfNodes = nodeService.getAll();
-        Node entry = listOfNodes.get(1);
+        Node entry = listOfNodes.get(0);
 
         if (entry.getType()==NodeType.ENTRY){
             return entry;
@@ -76,19 +76,24 @@ public class GreedyAlgorithm {
                 return entry;
             }
         }
-        return entry;
+        throw new RuntimeException("There must be an ENTRY Node");
     }
 
     public Node getExit(){
         List<Node> listOfNodes = nodeService.getAll();
         Node exit = listOfNodes.get(0);
+
+        if (exit.getType()==NodeType.EXIT){
+            return exit;
+        }
+
         for(int i=0 ; i< listOfNodes.size() ; i++) {
             exit = listOfNodes.get(i);
             if (exit.getType() == NodeType.EXIT) {
                 return exit;
             }
         }
-        return exit;
+        throw new RuntimeException("There must be an EXIT Node");
     }
 
 
