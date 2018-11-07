@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.put.poznan.networkanalyzer.model.Node;
+import pl.put.poznan.networkanalyzer.model.NodeType;
 import pl.put.poznan.networkanalyzer.persistence.NodeRepository;
 
 import java.util.Collections;
@@ -55,6 +56,15 @@ public class NodeService {
             return node.get();
         }
         throw new RuntimeException("Node with a given id doesn't exist: " + nodeId);
+    }
+
+    /**
+     * Returns list of nodes of given type.
+     * @param type requested type
+     * @return list of matching nodes
+     */
+    public List<Node> getByType(NodeType type) {
+        return nodeRepository.getByType(type);
     }
 
     /**

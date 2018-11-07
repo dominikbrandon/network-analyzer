@@ -1,44 +1,29 @@
-package pl.put.poznan.networkanalyzer.algorithms;
+package pl.put.poznan.networkanalyzer.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.collect.Lists;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.put.poznan.networkanalyzer.model.ConnectionDto;
 import pl.put.poznan.networkanalyzer.model.Node;
-import pl.put.poznan.networkanalyzer.service.ConnectionService;
-import pl.put.poznan.networkanalyzer.service.NodeService;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
 
 @Service
-@Slf4j
-public class ExampleAlgorithm {
+public class DbFiller {
     private NodeService nodeService;
     private ConnectionService connectionService;
 
     @Autowired
-    public ExampleAlgorithm(NodeService nodeService, ConnectionService connectionService) {
+    public DbFiller(NodeService nodeService, ConnectionService connectionService) {
         this.nodeService = nodeService;
         this.connectionService = connectionService;
-
-        try {
-            fillDb("graphs/graph1_v2.json");
-        } catch (IOException e) {
-            log.error("Error parsing JSON", e);
-        }
     }
 
-    // ***************** TEMP *********************
-    private void fillDb(String filePath) throws IOException {
-        // this crazy shit loads data on startup so you dont have to do it manually - isnt that beautiful??
-        // we will remove it someday
+    public void fillFromJson(String filePath) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
         File file = new File(filePath);
 
@@ -52,11 +37,5 @@ public class ExampleAlgorithm {
         List<ConnectionDto> connectionDtos = Arrays.asList(connectionDtosArray);
         nodeService.saveAll(nodes);
         connectionService.saveAll(connectionDtos);
-    }
-    // ***************** TEMP *********************
-
-    public LinkedList<Node> compute() {
-        // stuff
-        return Lists.newLinkedList();
     }
 }
