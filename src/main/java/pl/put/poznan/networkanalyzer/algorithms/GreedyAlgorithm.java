@@ -57,7 +57,7 @@ public class GreedyAlgorithm {
     class Outcome                                                       //for storing results of computing
     {
         public LinkedList<Node> nodes = new LinkedList<Node>();
-        public int connectionValue;
+        public int totalValue;
     }
 
 
@@ -106,7 +106,7 @@ public class GreedyAlgorithm {
     }
 
 
-    public Outcome getCheapestOutgoing(Node examined){
+    public Connection getCheapestOutgoing(Node examined){
 
         List<Connection> successors = examined.getOutgoing();       //make it royal
         Connection cheapest = successors.get(0);                    //initiate it with first connection
@@ -119,28 +119,23 @@ public class GreedyAlgorithm {
             }
         }
 
-        ConnectionId resultConnectionId = cheapest.getId();
-        Outcome result = new Outcome();
-
-        result.nodes.add(resultConnectionId.getTo());
-        result.connectionValue = cheapest.getValue();
-        return result;
+        return cheapest;
     }
 
 
     public Outcome compute() {
-        // stuff
+
         Node first = getEntry();
         Node last = getExit();
         Outcome actualResult = new Outcome();           //greedyAlgorithm result will be stored here
                 actualResult.nodes.add(first);          //initiate it with first element (entry)
-                actualResult.connectionValue = 0;
-        Outcome nextNode ;                              //variable which will be holding next Node on the path
+                actualResult.totalValue = 0;
+        Connection nextConnection ;                                          //variable which will be holding next Node on the path
 
-        while((actualResult.nodes.getLast()).getId() != last.getId()){     //while we haven't reached the exit Node get cheapest next Node
-            nextNode = getCheapestOutgoing(actualResult.nodes.getLast());
-            actualResult.connectionValue += nextNode.connectionValue;
-            actualResult.nodes.add(nextNode.nodes.getFirst());
+        while((actualResult.nodes.getLast()).getId() != last.getId()){       //while we haven't reached the exit Node get cheapest next Node
+            nextConnection = getCheapestOutgoing(actualResult.nodes.getLast());
+            actualResult.totalValue += nextConnection.getValue();
+            actualResult.nodes.add(nextConnection.getId().getTo());
         }
 
         //ToDo
