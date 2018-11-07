@@ -56,44 +56,53 @@ public class GreedyAlgorithm {
     // ***************** TEMP *********************
     class Outcome                                                       //for storing results of computing
     {
-        public LinkedList<Node>   nodes = new LinkedList<Node>();   //I gave new LinkedList.. because without this I had NullPointerException
-        public int                connectionValue;
-
+        public LinkedList<Node> nodes = new LinkedList<Node>();
+        public int connectionValue;
     }
 
 
     public Node getEntry(){
         List<Node> listOfNodes = nodeService.getAll();
-        Node entry = listOfNodes.get(0);
-
-        if (entry.getType()==NodeType.ENTRY){
-            return entry;
-        }
+        Node entry = new Node();
+        entry.setType(NodeType.REGULAR);
 
         for(int i=0 ; i< listOfNodes.size() ; i++) {
-            entry = listOfNodes.get(i);
-            if (entry.getType() == NodeType.ENTRY) {
-                return entry;
+
+            if (listOfNodes.get(i).getType() == NodeType.ENTRY) {
+                if(entry.getType() == NodeType.ENTRY){
+                    throw new RuntimeException("There can't be more than 1 Node with ENTRY type");
+                }
+                entry = listOfNodes.get(i);
             }
         }
-        throw new RuntimeException("There must be an ENTRY Node");
+
+        if (entry.getType() == NodeType.REGULAR){
+            throw new RuntimeException("There must be 1 Node with ENTRY type");
+        }else{
+            return entry;
+        }
     }
 
     public Node getExit(){
         List<Node> listOfNodes = nodeService.getAll();
-        Node exit = listOfNodes.get(0);
-
-        if (exit.getType()==NodeType.EXIT){
-            return exit;
-        }
+        Node exit = new Node();
+        exit.setType(NodeType.REGULAR);
 
         for(int i=0 ; i< listOfNodes.size() ; i++) {
-            exit = listOfNodes.get(i);
-            if (exit.getType() == NodeType.EXIT) {
-                return exit;
+
+            if (listOfNodes.get(i).getType() == NodeType.EXIT) {
+                if(exit.getType() == NodeType.EXIT){
+                    throw new RuntimeException("There can't be more than 1 Node with EXIT type");
+                }
+                exit = listOfNodes.get(i);
             }
         }
-        throw new RuntimeException("There must be an EXIT Node");
+
+        if (exit.getType() == NodeType.REGULAR){
+            throw new RuntimeException("There must be 1 Node with EXIT type");
+        }else{
+            return exit;
+        }
     }
 
 
@@ -111,15 +120,15 @@ public class GreedyAlgorithm {
         }
 
         ConnectionId resultConnectionId = cheapest.getId();
-
         Outcome result = new Outcome();
+
         result.nodes.add(resultConnectionId.getTo());
         result.connectionValue = cheapest.getValue();
         return result;
     }
 
 
-    public LinkedList<Node> compute() {
+    public Outcome compute() {
         // stuff
         Node first = getEntry();
         Node last = getExit();
@@ -130,16 +139,13 @@ public class GreedyAlgorithm {
 
         while((actualResult.nodes.getLast()).getId() != last.getId()){     //while we haven't reached the exit Node get cheapest next Node
             nextNode = getCheapestOutgoing(actualResult.nodes.getLast());
-            actualResult.connectionValue = actualResult.connectionValue + nextNode.connectionValue;
+            actualResult.connectionValue += nextNode.connectionValue;
             actualResult.nodes.add(nextNode.nodes.getFirst());
         }
 
         //ToDo
         // - create class Outcome in another file
-        // - add RuntimeException to getEntry() and getExit()
-        //ToDo - NEED HELP
-        //compute() should return actualResult
 
-        return Lists.newLinkedList();
+        return actualResult;
     }
 }
