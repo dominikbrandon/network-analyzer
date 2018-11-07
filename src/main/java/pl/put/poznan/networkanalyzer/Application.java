@@ -2,19 +2,25 @@ package pl.put.poznan.networkanalyzer;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
+import pl.put.poznan.networkanalyzer.service.DbFiller;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
+import java.io.IOException;
+
 @SpringBootApplication
 @EnableSwagger2
 public class Application {
 
-    public static void main(String[] args) {
-        SpringApplication.run(Application.class, args);
+    public static void main(String[] args) throws IOException {
+        ApplicationContext ctxt = SpringApplication.run(Application.class, args);
+        DbFiller dbFiller = ctxt.getBean(DbFiller.class);
+        dbFiller.fillFromJson("graphs/graph1_v2.json");
     }
 
     @Bean
