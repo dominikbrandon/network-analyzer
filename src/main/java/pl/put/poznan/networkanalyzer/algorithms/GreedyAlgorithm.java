@@ -21,8 +21,8 @@ public class GreedyAlgorithm {
     }
 
     public AlgorithmResult compute() {
-        Node currentNode = getEntry();
-        Node exit = getExit();
+        Node currentNode = getNodeOfTypeWhenOnlyOneExists(NodeType.ENTRY);
+        Node exit = getNodeOfTypeWhenOnlyOneExists(NodeType.EXIT);
         AlgorithmResult result = new AlgorithmResult();
         result.nodes.add(currentNode);
 
@@ -50,47 +50,11 @@ public class GreedyAlgorithm {
         return cheapest;
     }
 
-    private Node getEntry() {
-        List<Node> listOfNodes = nodeService.getAll();
-        Node entry = new Node();
-        entry.setType(NodeType.REGULAR);
-
-        for (int i = 0; i < listOfNodes.size(); i++) {
-
-            if (listOfNodes.get(i).getType() == NodeType.ENTRY) {
-                if (entry.getType() == NodeType.ENTRY) {
-                    throw new RuntimeException("There can't be more than 1 Node with ENTRY type");
-                }
-                entry = listOfNodes.get(i);
-            }
+    private Node getNodeOfTypeWhenOnlyOneExists(NodeType type) {
+        List<Node> entries = nodeService.getByType(type);
+        if (entries.size() != 1) {
+            throw new RuntimeException("There must be 1 node of type " + type + ", found: " + entries.size());
         }
-
-        if (entry.getType() == NodeType.REGULAR) {
-            throw new RuntimeException("There must be 1 Node with ENTRY type");
-        } else {
-            return entry;
-        }
-    }
-
-    private Node getExit() {
-        List<Node> listOfNodes = nodeService.getAll();
-        Node exit = new Node();
-        exit.setType(NodeType.REGULAR);
-
-        for (int i = 0; i < listOfNodes.size(); i++) {
-
-            if (listOfNodes.get(i).getType() == NodeType.EXIT) {
-                if (exit.getType() == NodeType.EXIT) {
-                    throw new RuntimeException("There can't be more than 1 Node with EXIT type");
-                }
-                exit = listOfNodes.get(i);
-            }
-        }
-
-        if (exit.getType() == NodeType.REGULAR) {
-            throw new RuntimeException("There must be 1 Node with EXIT type");
-        } else {
-            return exit;
-        }
+        return entries.get(0);
     }
 }
