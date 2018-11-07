@@ -8,7 +8,6 @@ import pl.put.poznan.networkanalyzer.model.Node;
 import pl.put.poznan.networkanalyzer.model.NodeType;
 import pl.put.poznan.networkanalyzer.service.NodeService;
 
-import java.util.LinkedList;
 import java.util.List;
 
 @Service
@@ -20,13 +19,6 @@ public class GreedyAlgorithm {
     public GreedyAlgorithm(NodeService nodeService) {
         this.nodeService = nodeService;
     }
-
-    class Outcome                                                       //for storing results of computing
-    {
-        public LinkedList<Node> nodes = new LinkedList<Node>();
-        public int totalValue;
-    }
-
 
     public Node getEntry(){
         List<Node> listOfNodes = nodeService.getAll();
@@ -90,11 +82,11 @@ public class GreedyAlgorithm {
     }
 
 
-    public Outcome compute() {
+    public AlgorithmResult compute() {
 
         Node first = getEntry();
         Node last = getExit();
-        Outcome actualResult = new Outcome();           //greedyAlgorithm result will be stored here
+        AlgorithmResult actualResult = new AlgorithmResult();           //greedyAlgorithm result will be stored here
                 actualResult.nodes.add(first);          //initiate it with first element (entry)
                 actualResult.totalValue = 0;
         Connection nextConnection ;                                          //variable which will be holding next Node on the path
@@ -106,7 +98,7 @@ public class GreedyAlgorithm {
         }
 
         //ToDo
-        // - create class Outcome in another file
+        // - create class AlgorithmResult in another file
 
         return actualResult;
     }
