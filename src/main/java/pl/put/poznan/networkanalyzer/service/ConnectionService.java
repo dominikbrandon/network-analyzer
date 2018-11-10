@@ -47,7 +47,7 @@ public class ConnectionService {
      * @return never null
      */
     public List<Connection> getAll() {
-        log.debug("Getting all connections");
+        log.info("Getting all connections");
         return connectionRepository.findAll();
     }
 
@@ -57,7 +57,7 @@ public class ConnectionService {
      * @return never null
      */
     public List<Connection> getBySearchParams(ConnectionSearchParameters searchParameters) {
-        log.debug("Getting connections by search criteria: " + searchParameters.toString());
+        log.info("Getting connections by search criteria: " + searchParameters.toString());
         return connectionRepository.findAll(new ConnectionSpecification(searchParameters));
     }
 
@@ -67,7 +67,7 @@ public class ConnectionService {
      * @see ConnectionService#saveAll(List)
      */
     public void save(ConnectionDto connectionDto) {
-        log.debug("Saving single connection by DTO: " + connectionDto.toString());
+        log.info("Saving single connection by DTO: " + connectionDto.toString());
         saveAll(Collections.singletonList(connectionDto));
     }
 
@@ -93,7 +93,7 @@ public class ConnectionService {
             }
             connections.add(new Connection(connId, connectionDto.value));
         });
-        log.debug("Saving all created connections");
+        log.info("Saving all created connections");
         connectionRepository.saveAll(connections);
     }
 
@@ -107,7 +107,7 @@ public class ConnectionService {
      * @throws javax.persistence.EntityNotFoundException if nodes being connected don't exist
      */
     public void update(Long fromId, Long toId, ConnectionDto connectionDto) {
-        log.debug("Updating connection from " + fromId + " to " + toId + " with DTO: " + connectionDto.toString());
+        log.info("Updating connection from " + fromId + " to " + toId + " with DTO: " + connectionDto.toString());
         ConnectionId connId = createConnectionId(fromId, toId);
         Connection connection = new Connection(connId, connectionDto.value);
         connectionRepository.save(connection);
@@ -121,7 +121,7 @@ public class ConnectionService {
      * @throws org.springframework.dao.EmptyResultDataAccessException if connection between nodes doesn't exist
      */
     public void delete(Long fromId, Long toId) {
-        log.debug("Deleting connection from " + fromId + " to " + toId);
+        log.info("Deleting connection from " + fromId + " to " + toId);
         ConnectionId connId = createConnectionId(fromId, toId);
         connectionRepository.deleteById(connId);
     }

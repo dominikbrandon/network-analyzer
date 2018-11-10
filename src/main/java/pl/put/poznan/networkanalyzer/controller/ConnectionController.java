@@ -13,7 +13,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/connections")
-@Slf4j
 public class ConnectionController {
     private ConnectionService connectionService;
 
@@ -25,7 +24,6 @@ public class ConnectionController {
     @GetMapping
     public List<Connection> findByNodes(@RequestParam(value = "from", required = false) Long fromId,
                                         @RequestParam(value = "to", required = false) Long toId) {
-        log.info("Getting connections from " + fromId + " to " + toId);
         ConnectionSearchParameters searchParameters = new ConnectionSearchParameters();
         searchParameters.from = fromId;
         searchParameters.to = toId;
@@ -35,20 +33,17 @@ public class ConnectionController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public void saveAll(@RequestBody List<ConnectionDto> connectionDtos) {
-        log.info("Saving list of connections");
         connectionService.saveAll(connectionDtos);
     }
 
     @PutMapping(value = "/{from}/{to}")
     public void update(@PathVariable("from") Long fromId, @PathVariable("to") Long toId,
                        @RequestBody ConnectionDto connectionDto) {
-        log.info("Updating connection from " + fromId + " to " + toId);
         connectionService.update(fromId, toId, connectionDto);
     }
 
     @DeleteMapping(value = "/{from}/{to}")
     public void delete(@PathVariable("from") Long fromId, @PathVariable("to") Long toId) {
-        log.info("Deleting connection from " + fromId + " to " + toId);
         connectionService.delete(fromId, toId);
     }
 }

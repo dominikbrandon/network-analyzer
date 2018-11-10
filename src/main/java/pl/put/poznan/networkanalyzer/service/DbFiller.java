@@ -2,7 +2,9 @@ package pl.put.poznan.networkanalyzer.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import pl.put.poznan.networkanalyzer.model.ConnectionDto;
 import pl.put.poznan.networkanalyzer.model.Node;
@@ -13,17 +15,21 @@ import java.util.Arrays;
 import java.util.List;
 
 @Service
+@Slf4j
+@Lazy
 public class DbFiller {
     private NodeService nodeService;
     private ConnectionService connectionService;
 
     @Autowired
     public DbFiller(NodeService nodeService, ConnectionService connectionService) {
+        log.debug("Creating an instance of DbFiller");
         this.nodeService = nodeService;
         this.connectionService = connectionService;
     }
 
     public void fillFromJson(String filePath) throws IOException {
+        log.info("Filling db from json: " + filePath);
         ObjectMapper objectMapper = new ObjectMapper();
         File file = new File(filePath);
 

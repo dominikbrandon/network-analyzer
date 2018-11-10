@@ -30,7 +30,7 @@ public class NodeService {
      */
     @Autowired
     public NodeService(NodeRepository nodeRepository) {
-        log.debug("Creating instance of NodeService");
+        log.debug("Creating an instance of NodeService");
         this.nodeRepository = nodeRepository;
     }
 
@@ -39,7 +39,7 @@ public class NodeService {
      * @return never null
      */
     public List<Node> getAll() {
-        log.debug("Getting all nodes");
+        log.info("Getting all nodes");
         return nodeRepository.findAll();
     }
 
@@ -50,7 +50,7 @@ public class NodeService {
      * @throws RuntimeException if no node exists for a given id
      */
     public Node getById(Long nodeId) {
-        log.debug("Getting node by id: " + nodeId);
+        log.info("Getting node by id: " + nodeId);
         Optional<Node> node = nodeRepository.findById(nodeId);
         if (node.isPresent()) {
             return node.get();
@@ -64,6 +64,7 @@ public class NodeService {
      * @return list of matching nodes
      */
     public List<Node> getByType(NodeType type) {
+        log.info("Getting node by type: " + type);
         return nodeRepository.getByType(type);
     }
 
@@ -74,7 +75,7 @@ public class NodeService {
      * @throws RuntimeException if node with given id already exists in the repository
      */
     public void save(Node node) {
-        log.debug("Saving node: " + node.toString());
+        log.info("Saving node: " + node.toString());
         saveAll(Collections.singletonList(node));
     }
 
@@ -87,7 +88,7 @@ public class NodeService {
      */
     public void saveAll(List<Node> nodes) {
         nodes.forEach(node -> {
-            log.debug("Checking id of node: " + node.toString());
+            log.debug("Validating id: " + node.toString());
             Long nodeId = node.getId();
             if (nodeId == null) {
                 throw new RuntimeException("Node id must not be null");
@@ -96,7 +97,7 @@ public class NodeService {
                 throw new RuntimeException("Node with given id already exists: " + nodeId);
             }
         });
-        log.debug("Saving all processed nodes");
+        log.info("Saving all processed nodes");
         nodeRepository.saveAll(nodes);
     }
 
@@ -107,7 +108,7 @@ public class NodeService {
      * @param updatedNode node object to be saved
      */
     public void update(Long nodeId, Node updatedNode) {
-        log.debug("Updating node of id " + nodeId + " with the following: " + updatedNode.toString());
+        log.info("Updating node of id " + nodeId + " with the following: " + updatedNode.toString());
         updatedNode.setId(nodeId);
         nodeRepository.save(updatedNode);
     }
@@ -118,7 +119,7 @@ public class NodeService {
      * @throws org.springframework.dao.EmptyResultDataAccessException if node of a given id does not exist in the repository
      */
     public void deleteById(Long nodeId) {
-        log.debug("Deleting node of id: " + nodeId);
+        log.info("Deleting node of id: " + nodeId);
         nodeRepository.deleteById(nodeId);
     }
 }

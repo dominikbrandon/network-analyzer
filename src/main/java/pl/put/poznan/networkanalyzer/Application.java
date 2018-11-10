@@ -29,7 +29,6 @@ public class Application {
         // greedy algorithm
         GreedyAlgorithm greedyAlgorithm = ctxt.getBean(GreedyAlgorithm.class);
         AlgorithmResult greedyResult = greedyAlgorithm.compute();
-        log.info(greedyResult.toString());
     }
 
     @Bean

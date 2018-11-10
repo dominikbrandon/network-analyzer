@@ -2,6 +2,7 @@ package pl.put.poznan.networkanalyzer.algorithms;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import pl.put.poznan.networkanalyzer.model.Connection;
 import pl.put.poznan.networkanalyzer.model.Node;
@@ -12,6 +13,7 @@ import java.util.List;
 
 @Service
 @Slf4j
+@Lazy
 public class GreedyAlgorithm {
     private NodeService nodeService;
 
@@ -21,6 +23,7 @@ public class GreedyAlgorithm {
     }
 
     public AlgorithmResult compute() {
+        log.info("Running greedy algorithm");
         Node currentNode = getNodeOfTypeWhenOnlyOneExists(NodeType.ENTRY);
         Node exit = getNodeOfTypeWhenOnlyOneExists(NodeType.EXIT);
         AlgorithmResult result = new AlgorithmResult();
@@ -36,6 +39,8 @@ public class GreedyAlgorithm {
             result.totalValue += nextConnection.getValue();
             result.nodes.add(currentNode);
         }
+        log.info("Finished computing");
+        log.debug("Result: " + result.toString());
         return result;
     }
 
