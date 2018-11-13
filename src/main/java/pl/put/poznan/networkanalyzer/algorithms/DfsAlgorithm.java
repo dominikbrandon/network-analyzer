@@ -9,8 +9,6 @@ import pl.put.poznan.networkanalyzer.model.Node;
 import pl.put.poznan.networkanalyzer.model.NodeType;
 import pl.put.poznan.networkanalyzer.service.NodeService;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
@@ -19,46 +17,46 @@ import java.util.Objects;
 @Lazy
 public class DfsAlgorithm {
     private NodeService nodeService;
-    private AlgorithmResult bestResult = null;
+    private AlgorithmResult bestResult;
 
     @Autowired
     public DfsAlgorithm(NodeService nodeService) {
         this.nodeService = nodeService;
     }
 
-    public AlgorithmResult dfs() {
+    public AlgorithmResult compute() {
+        log.info("Running DFS algorithm");
+        long startTime = System.nanoTime();
         Node entry = getNodeOfTypeWhenOnlyOneExists(NodeType.ENTRY);
         Node exit = getNodeOfTypeWhenOnlyOneExists(NodeType.EXIT);
         AlgorithmResult path = new AlgorithmResult();
         path.nodes.add(entry);
-        startDfs(entry.getId(), exit.getId(), path);
+        bestResult = null;
+        stepInto(entry, exit.getId(), path);
+        long elapsedTime = System.nanoTime() - startTime;
+        log.info("Finished DFS algorithm in " + elapsedTime / 1000000 + " ms");
         return bestResult;
     }
 
-    private void startDfs(Long id, Long exit, AlgorithmResult path) {
-        log.debug(path.toString());
-        if(bestResult != null && path.totalValue >= bestResult.totalValue){
+    private void stepInto(Node currentNode, Long exitId, AlgorithmResult path) {
+        if (bestResult != null && path.totalValue >= bestResult.totalValue) {
             return;
         }
-        if (Objects.equals(id, exit)) {
-            AlgorithmResult newPath = new AlgorithmResult(path);
-            log.debug("Dodałem path");
-            bestResult = newPath;
+        if (Objects.equals(currentNode.getId(), exitId)) {
+            bestResult = new AlgorithmResult(path);
             return;
         }
-        Node current = nodeService.getById(id);
-        List<Connection> neighbours = current.getOutgoing();
-        log.debug(neighbours.toString());
+        List<Connection> neighbours = currentNode.getOutgoing();
         for (Connection neighbour : neighbours) {
-            Node nodeTo = neighbour.getId().getTo();
-            path.nodes.add(nodeTo);
+            Node nextNode = neighbour.getId().getTo();
+            path.nodes.add(nextNode);
             path.totalValue += neighbour.getValue();
-            startDfs(nodeTo.getId(), exit, path);
+            stepInto(nextNode, exitId, path);
             path.totalValue -= neighbour.getValue();
-            path.nodes.remove(nodeTo);
+            path.nodes.remove(nextNode);
         }
     }
-    
+
     private Node getNodeOfTypeWhenOnlyOneExists(NodeType type) {
         List<Node> entries = nodeService.getByType(type);
         if (entries.size() != 1) {

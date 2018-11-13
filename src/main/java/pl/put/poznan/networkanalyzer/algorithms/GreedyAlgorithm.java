@@ -24,6 +24,7 @@ public class GreedyAlgorithm {
 
     public AlgorithmResult compute() {
         log.info("Running greedy algorithm");
+        long startTime = System.nanoTime();
         Node currentNode = getNodeOfTypeWhenOnlyOneExists(NodeType.ENTRY);
         Node exit = getNodeOfTypeWhenOnlyOneExists(NodeType.EXIT);
         AlgorithmResult result = new AlgorithmResult();
@@ -39,8 +40,8 @@ public class GreedyAlgorithm {
             result.totalValue += nextConnection.getValue();
             result.nodes.add(currentNode);
         }
-        log.info("Finished computing");
-        log.debug("Result: " + result.toString());
+        long elapsedTime = System.nanoTime() - startTime;
+        log.info("Finished greedy algorithm in " + elapsedTime / 1000000 + " ms");
         return result;
     }
 

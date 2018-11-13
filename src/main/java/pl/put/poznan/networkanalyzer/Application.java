@@ -30,9 +30,11 @@ public class Application {
         // greedy algorithm
         GreedyAlgorithm greedyAlgorithm = ctxt.getBean(GreedyAlgorithm.class);
         AlgorithmResult greedyResult = greedyAlgorithm.compute();
+        log.debug("Greedy result: " + greedyResult.toString());
+        // dfs algorithm
         DfsAlgorithm dfsAlgorithm = ctxt.getBean(DfsAlgorithm.class);
-        AlgorithmResult dfsResult = dfsAlgorithm.dfs();
-        log.debug(dfsResult.toString());
+        AlgorithmResult dfsResult = dfsAlgorithm.compute();
+        log.debug("DFS result: " + dfsResult.toString());
     }
 
     @Bean
