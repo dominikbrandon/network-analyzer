@@ -9,64 +9,56 @@ import pl.put.poznan.networkanalyzer.model.Node;
 import pl.put.poznan.networkanalyzer.model.NodeType;
 import pl.put.poznan.networkanalyzer.service.NodeService;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @Slf4j
 @Lazy
 public class DfsAlgorithm {
     private NodeService nodeService;
-    private List<AlgorithmResult> results = new ArrayList<>();
+    private AlgorithmResult bestResult = null;
 
     @Autowired
     public DfsAlgorithm(NodeService nodeService) {
         this.nodeService = nodeService;
     }
-    private AlgorithmResult findBest(List<AlgorithmResult> rst){
-        for(AlgorithmResult p: rst){
-            for(int i : p.getNodes()) {
-                System.out.print(i + " ");
-            }
-            System.out.println(" ");
-        }
-        AlgorithmResult best = rst.get(0);
-        for (AlgorithmResult result : rst) {
-            if (result.totalValue < best.totalValue) best = result;
-        }
-        return best;
-    }
 
     public AlgorithmResult dfs() {
         Node entry = getNodeOfTypeWhenOnlyOneExists(NodeType.ENTRY);
         Node exit = getNodeOfTypeWhenOnlyOneExists(NodeType.EXIT);
-        startDfs(entry.getId(), entry.getId(), new AlgorithmResult());
-        return findBest(results);
+        AlgorithmResult path = new AlgorithmResult();
+        path.nodes.add(entry);
+        startDfs(entry.getId(), exit.getId(), path);
+        return bestResult;
     }
 
-    private void startDfs(Long id, Long prev, AlgorithmResult path) {
-        Nodes current = findNode(id);
-        Connection connection
-        path.getNodes().add(current.getId());
-        Integer cost = findCost(prev, id);
-        path.totalValue +=
-        if (current.getId().equals(exit.getId())) {
-            results.add(path);
+    private void startDfs(Long id, Long exit, AlgorithmResult path) {
+        log.debug(path.toString());
+        if(bestResult != null && path.totalValue >= bestResult.totalValue){
             return;
         }
-        if(path.getNodes).size() >= nodes.size()) return;
-        current.getOutgoing().forEach(id1 -> startDfs(id1, id, new List<AlgorithmResult>(path)));
-    }
-
-    private Node findNode(Long id) {
-        NodeService service = new NodeService();
-        List<Node> nodes = service.getAll();
-        for (Node node : nodes) {
-            if (node.getId().equals(id))
-                return node;
+        if (Objects.equals(id, exit)) {
+            AlgorithmResult newPath = new AlgorithmResult(path);
+            log.debug("Dodałem path");
+            bestResult = newPath;
+            return;
         }
-        return null;
+        Node current = nodeService.getById(id);
+        List<Connection> neighbours = current.getOutgoing();
+        log.debug(neighbours.toString());
+        for (Connection neighbour : neighbours) {
+            Node nodeTo = neighbour.getId().getTo();
+            path.nodes.add(nodeTo);
+            path.totalValue += neighbour.getValue();
+            startDfs(nodeTo.getId(), exit, path);
+            path.totalValue -= neighbour.getValue();
+            path.nodes.remove(nodeTo);
+        }
     }
-
+    
     private Node getNodeOfTypeWhenOnlyOneExists(NodeType type) {
         List<Node> entries = nodeService.getByType(type);
         if (entries.size() != 1) {
