@@ -1,0 +1,147 @@
+{
+   "Node": [
+
+      {
+         "id": 1,
+         "name": null,
+         "type": "ENTRY"
+      },
+
+      {
+         "id": 2,
+         "name": null,
+         "type": "REGULAR"
+      },
+
+      {
+         "id": 3,
+         "name": null,
+         "type": "REGULAR"
+      },
+
+      {
+         "id": 4,
+         "name": null,
+         "type": "REGULAR"
+      },
+
+      {
+         "id": 5,
+         "name": null,
+         "type": "REGULAR"
+      },
+
+      {
+         "id": 6,
+         "name": null,
+         "type": "REGULAR"
+      },
+
+      {
+         "id": 7,
+         "name": null,
+         "type": "REGULAR"
+      },
+
+      {
+         "id": 8,
+         "name": null,
+         "type": "REGULAR"
+      },
+
+      {
+         "id": 9,
+         "name": null,
+         "type": "REGULAR"
+      },
+
+      {
+         "id": 10,
+         "name": null,
+         "type": "EXIT"
+      }
+
+   ],
+
+   "Connection":[
+
+     {
+       "from": 1,
+       "to": 2,
+       "value": 4
+     },
+
+     {
+       "from": 1,
+       "to": 3,
+       "value": 5
+     },
+
+     {
+       "from": 3,
+       "to": 5,
+       "value": 3
+     },
+
+     {
+       "from": 5,
+       "to": 6,
+       "value": 2
+     },
+
+     {
+       "from": 2,
+       "to": 5,
+       "value": 8
+     },
+
+     {
+       "from": 2,
+       "to": 4,
+       "value": 7
+     },
+
+     {
+       "from": 4,
+       "to": 6,
+       "value": 8
+     },
+
+     {
+       "from": 6,
+       "to": 7,
+       "value": 5
+     },
+
+     {
+       "from": 6,
+       "to": 8,
+       "value": 3
+     },
+
+     {
+       "from": 6,
+       "to": 9,
+       "value": 4
+     },
+
+     {
+       "from": 7,
+       "to": 10,
+       "value": 3
+     },
+
+     {
+       "from": 8,
+       "to": 10,
+       "value": 5
+     },
+
+     {
+       "from": 9,
+       "to": 10,
+       "value": 6
+     }
+
+   ]
+}
