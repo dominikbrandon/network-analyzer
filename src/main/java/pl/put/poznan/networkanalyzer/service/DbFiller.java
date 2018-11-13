@@ -14,6 +14,16 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Service used for parsing JSON data into objects
+ * and afterwards saving created {@link Node Nodes}
+ * and {@link pl.put.poznan.networkanalyzer.model.Connection Connections}
+ * to database.
+ *
+ * @author Dominik Grzelak
+ * @version 1.0
+ * @since 1.0
+ */
 @Service
 @Slf4j
 @Lazy
@@ -21,6 +31,11 @@ public class DbFiller {
     private NodeService nodeService;
     private ConnectionService connectionService;
 
+    /**
+     * Creates a new instance of DbFiller.
+     * @param nodeService API for managing nodes
+     * @param connectionService API for managing connections
+     */
     @Autowired
     public DbFiller(NodeService nodeService, ConnectionService connectionService) {
         log.debug("Creating an instance of DbFiller");
@@ -28,6 +43,11 @@ public class DbFiller {
         this.connectionService = connectionService;
     }
 
+    /**
+     * Reads JSON from the file of given path and saves read objects in the repositories.
+     * @param filePath path to the JSON file
+     * @throws IOException when JSON could not be parsed
+     */
     public void fillFromJson(String filePath) throws IOException {
         log.info("Filling db from json: " + filePath);
         ObjectMapper objectMapper = new ObjectMapper();
