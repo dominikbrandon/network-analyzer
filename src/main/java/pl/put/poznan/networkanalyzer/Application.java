@@ -7,6 +7,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import pl.put.poznan.networkanalyzer.algorithms.AlgorithmResult;
 import pl.put.poznan.networkanalyzer.algorithms.DfsAlgorithm;
+import pl.put.poznan.networkanalyzer.algorithms.BfsAlgorithm;
 import pl.put.poznan.networkanalyzer.algorithms.GreedyAlgorithm;
 import pl.put.poznan.networkanalyzer.service.DbFiller;
 import springfox.documentation.builders.PathSelectors;
@@ -35,6 +36,10 @@ public class Application {
         DfsAlgorithm dfsAlgorithm = ctxt.getBean(DfsAlgorithm.class);
         AlgorithmResult dfsResult = dfsAlgorithm.compute();
         log.debug("DFS result: " + dfsResult.toString());
+        // bfs algorithm
+        BfsAlgorithm bfsAlgorithm = ctxt.getBean(BfsAlgorithm.class);
+        AlgorithmResult bfsResult = bfsAlgorithm.compute();
+        log.debug("BFS result: " + bfsResult.toString());
     }
 
     @Bean
