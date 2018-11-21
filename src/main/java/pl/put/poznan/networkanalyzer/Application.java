@@ -27,7 +27,7 @@ public class Application {
         ApplicationContext ctxt = SpringApplication.run(Application.class, args);
         // fill db
         DbFiller dbFiller = ctxt.getBean(DbFiller.class);
-        dbFiller.fillFromJson("graphs/graph3_v2.json");
+        dbFiller.fillFromJson("graphs/graph1_v2.json");
         // greedy algorithm
         GreedyAlgorithm greedyAlgorithm = ctxt.getBean(GreedyAlgorithm.class);
         AlgorithmResult greedyResult = greedyAlgorithm.compute();
