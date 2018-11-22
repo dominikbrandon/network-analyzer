@@ -1,1 +1,10 @@
 language: java
+deploy:
+  provider: releases
+  api_key:
+    secure: FhqPQRW0H57wMyvdTSKvnLkMzTcg36D1gNA3jqKegLK4fpoall97eDyDAovGMc0MFdzYpBo49qfFG4KwObuiu5aUFRjVyi5OFqil8COZUQafz0X7uTQrVx3pthdWYEOPCktD6pFt8d+wxY3TyT2Gc+puHiYIYNxjiN2OHSh/bf16HWMzzZmzWA+bh0nSu70py0vWK0p/EXNProkEnd/EXpXs1ORgiOzjTF0GHPryOs0S1CJ+fK60y80eF5XBPS3j5aoss7dt2Jv23tAFCfx2RSxhjbchpsnh6U7haNmfz2UhMl2wDXkmxTIEGBT7zlzSqsoq0kgRpUcvPpcJmR+C4RmSjT27ifyJT6MJs/g3bbLgs8PFGGisVCARY1KIjqCRjndbSFiqoVL6Hy42jO4lHh+PeY7yYkXhkQDP/YXxY/YioDLlvbsfY//+dTfODxNtqh85q3eO2mb2LKaTwDzzp6DU815H5mmSD9t1J3GsaUIWIRkaqB+E3gPwQapG7H8M9h2iuQTESu7A3Kj/Zec9ydr+hILTktBOGmdcedR+gUfV+N9rbTRxAXlpFnN9pXzanVfPFlTfkUHsZ2az7Pjp+BNIwZZ/pEYO33C3eUn5T5VR65FFOVgrUNV0KSnJD+zECuhFyFxK53kS0ySQ1nbMdhQS3LWkjLgSc393vm6k++c=
+  file_glob: true
+  file: target/*.jar
+  skip_cleanup: true
+  on:
+    tags: true
