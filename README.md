@@ -1,6 +1,7 @@
 # Network Analyzer
 
 [![Build Status](https://travis-ci.org/dominikbrandon/network-analyzer.svg?branch=develop)](https://travis-ci.org/dominikbrandon/network-analyzer)
+[![codecov](https://codecov.io/gh/dominikbrandon/network-analyzer/branch/develop/graph/badge.svg)](https://codecov.io/gh/dominikbrandon/network-analyzer)
 
 ## Budowanie
 `mvn clean install`
