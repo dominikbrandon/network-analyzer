@@ -1,9 +1,7 @@
 package pl.put.poznan.networkanalyzer.algorithms;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.stereotype.Service;
 import pl.put.poznan.networkanalyzer.model.Connection;
 import pl.put.poznan.networkanalyzer.model.Node;
 import pl.put.poznan.networkanalyzer.model.NodeType;
@@ -12,16 +10,10 @@ import pl.put.poznan.networkanalyzer.service.NodeService;
 import java.util.LinkedList;
 import java.util.List;
 
-@Service
 @Slf4j
-@Lazy
-public class BfsAlgorithm {
-    private NodeService nodeService;
-
-    @Autowired
-    public BfsAlgorithm(NodeService nodeService) {
-        this.nodeService = nodeService;
-    }
+@RequiredArgsConstructor
+public class BfsAlgorithm implements AnalyzerAlgorithm {
+    private final NodeService nodeService;
 
     public AlgorithmResult compute() {
         log.info("Running BFS algorithm");
