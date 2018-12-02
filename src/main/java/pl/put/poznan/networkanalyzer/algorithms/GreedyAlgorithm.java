@@ -1,7 +1,9 @@
 package pl.put.poznan.networkanalyzer.algorithms;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Service;
 import pl.put.poznan.networkanalyzer.model.Connection;
 import pl.put.poznan.networkanalyzer.model.Node;
 import pl.put.poznan.networkanalyzer.model.NodeType;
@@ -9,11 +11,31 @@ import pl.put.poznan.networkanalyzer.service.NodeService;
 
 import java.util.List;
 
+/**
+ * Class used for computing greedy algorithm in order to
+ * receive path from ENTRY to EXIT
+ *
+ * @author Kacper Maciejewski
+ * @version 1.0
+ * @since 1.0
+ */
+@Service
 @Slf4j
-@RequiredArgsConstructor
-public class GreedyAlgorithm implements AnalyzerAlgorithm {
-    private final NodeService nodeService;
-
+@Lazy
+public class GreedyAlgorithm {
+    private NodeService nodeService;
+    /**
+     * Creates a new instance of GreedyAlgorithm and links it to currently tested graph
+     */
+    @Autowired
+    public GreedyAlgorithm(NodeService nodeService) {
+        this.nodeService = nodeService;
+    }
+    /**
+     *Method which does all of the computation in a greedy way also prints to the log
+     * how much time it was computing
+     * @return list of nodes on the path and total cost if it
+     */
     public AlgorithmResult compute() {
         log.info("Running greedy algorithm");
         long startTime = System.nanoTime();
@@ -47,7 +69,11 @@ public class GreedyAlgorithm implements AnalyzerAlgorithm {
         }
         return cheapest;
     }
-
+    /**
+     *Method which checks if graph is compliant - has one ENTRY and one EXIT
+     * @param type points if we are looking for ENTRY or EXIT
+     * @return ENTRY or EXIT node
+     */
     private Node getNodeOfTypeWhenOnlyOneExists(NodeType type) {
         List<Node> entries = nodeService.getByType(type);
         if (entries.size() != 1) {
