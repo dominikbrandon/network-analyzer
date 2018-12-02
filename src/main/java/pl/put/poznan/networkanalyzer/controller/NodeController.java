@@ -10,6 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/nodes")
+@CrossOrigin
 public class NodeController {
     private NodeService nodeService;
 
