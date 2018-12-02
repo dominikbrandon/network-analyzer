@@ -15,8 +15,7 @@ import pl.put.poznan.networkanalyzer.service.NodeService;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -53,5 +52,17 @@ public class NodeControllerTest {
         doThrow(RuntimeException.class).when(nodeService).saveAll(any());
         mockMvc.perform(post(ENDPOINT).content("[]").contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(status().isInternalServerError());
+    }
+
+    @Test
+    public void update_whenBodyEmpty_responds500() throws Exception {
+        mockMvc.perform(put(ENDPOINT + "/5").content("").contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(status().isInternalServerError());
+    }
+
+    @Test
+    public void update_whenInputValid_responds200() throws Exception {
+        mockMvc.perform(put(ENDPOINT + "/6").content("{\"id\": 6}").contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(status().isOk());
     }
 }

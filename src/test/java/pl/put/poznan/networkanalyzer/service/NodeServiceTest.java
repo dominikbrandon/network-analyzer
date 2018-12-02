@@ -7,9 +7,14 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import pl.put.poznan.networkanalyzer.model.Node;
+import pl.put.poznan.networkanalyzer.model.NodeType;
 import pl.put.poznan.networkanalyzer.persistence.NodeRepository;
 
+import java.util.Optional;
+
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -37,5 +42,31 @@ public class NodeServiceTest {
         when(nodeRepository.findAll()).thenReturn(Lists.emptyList());
 
         assertThat(nodeService.getAll()).isEmpty();
+    }
+
+    @Test
+    public void getById_whenNodeNotFound_throwRuntimeException() {
+        when(nodeRepository.findById(any())).thenReturn(Optional.empty());
+
+        assertThatExceptionOfType(RuntimeException.class).isThrownBy(() ->
+                nodeService.getById(6L)
+        );
+    }
+
+    @Test
+    public void getById_whenNodeExists_returnIt() {
+        Node node = new Node();
+        node.setId(7L);
+
+        when(nodeRepository.findById(7L)).thenReturn(Optional.of(node));
+
+        assertThat(nodeService.getById(7L)).isEqualTo(node);
+    }
+
+    @Test
+    public void getByType_whenNoNodesMatch_returnEmptyList() {
+        when(nodeRepository.getByType(any())).thenReturn(Lists.emptyList());
+
+        assertThat(nodeService.getByType(NodeType.ENTRY)).isEmpty();
     }
 }
