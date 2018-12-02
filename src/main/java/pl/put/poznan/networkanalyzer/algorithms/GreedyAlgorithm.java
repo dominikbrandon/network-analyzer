@@ -1,9 +1,7 @@
 package pl.put.poznan.networkanalyzer.algorithms;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.stereotype.Service;
 import pl.put.poznan.networkanalyzer.model.Connection;
 import pl.put.poznan.networkanalyzer.model.Node;
 import pl.put.poznan.networkanalyzer.model.NodeType;
@@ -19,18 +17,11 @@ import java.util.List;
  * @version 1.0
  * @since 1.0
  */
-@Service
 @Slf4j
-@Lazy
-public class GreedyAlgorithm {
-    private NodeService nodeService;
-    /**
-     * Creates a new instance of GreedyAlgorithm and links it to currently tested graph
-     */
-    @Autowired
-    public GreedyAlgorithm(NodeService nodeService) {
-        this.nodeService = nodeService;
-    }
+@RequiredArgsConstructor
+public class GreedyAlgorithm implements AnalyzerAlgorithm {
+    private final NodeService nodeService;
+
     /**
      *Method which does all of the computation in a greedy way also prints to the log
      * how much time it was computing
