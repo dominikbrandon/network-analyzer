@@ -69,4 +69,12 @@ public class NodeServiceTest {
 
         assertThat(nodeService.getByType(NodeType.ENTRY)).isEmpty();
     }
+
+    @Test
+    public void save_whenNodeCorrect_saveIt() {
+        Node node1 = new Node();
+        node1.setId(2L);
+        when(nodeRepository.save(node1)).thenReturn(null);
+        assertThat(nodeService.getById(2L)).isEqualTo(node1);
+    }
 }

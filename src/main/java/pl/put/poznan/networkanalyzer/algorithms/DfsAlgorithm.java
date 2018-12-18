@@ -10,12 +10,26 @@ import pl.put.poznan.networkanalyzer.service.NodeService;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Class used for computing greedy algorithm in order to
+ * receive path from ENTRY to EXIT
+ *
+ * @author Mateusz Wisniewski
+ * @version 1.0
+ * @since 1.0
+ */
 @Slf4j
 @RequiredArgsConstructor
 public class DfsAlgorithm implements AnalyzerAlgorithm {
     private final NodeService nodeService;
     private AlgorithmResult bestResult;
 
+
+    /**
+     *Method which does all of the computation in using deep first search algorithm also prints to the log
+     * how much time it was computing
+     * @return list of nodes on the path and total cost if it
+     */
     public AlgorithmResult compute() {
         log.info("Running DFS algorithm");
         long startTime = System.nanoTime();
@@ -48,7 +62,11 @@ public class DfsAlgorithm implements AnalyzerAlgorithm {
             path.nodes.remove(nextNode);
         }
     }
-
+    /**
+     *Method which checks if graph is compliant - has one ENTRY and one EXIT
+     * @param type points if we are looking for ENTRY or EXIT
+     * @return ENTRY or EXIT node
+     */
     private Node getNodeOfTypeWhenOnlyOneExists(NodeType type) {
         List<Node> entries = nodeService.getByType(type);
         if (entries.size() != 1) {
