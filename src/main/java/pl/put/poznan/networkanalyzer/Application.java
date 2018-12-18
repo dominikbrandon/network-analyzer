@@ -5,9 +5,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
-import pl.put.poznan.networkanalyzer.algorithms.AlgorithmResult;
-import pl.put.poznan.networkanalyzer.algorithms.DfsAlgorithm;
-import pl.put.poznan.networkanalyzer.algorithms.GreedyAlgorithm;
 import pl.put.poznan.networkanalyzer.service.DbFiller;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
@@ -26,15 +23,7 @@ public class Application {
         ApplicationContext ctxt = SpringApplication.run(Application.class, args);
         // fill db
         DbFiller dbFiller = ctxt.getBean(DbFiller.class);
-        dbFiller.fillFromJson("graphs/graph3_v2.json");
-        // greedy algorithm
-        GreedyAlgorithm greedyAlgorithm = ctxt.getBean(GreedyAlgorithm.class);
-        AlgorithmResult greedyResult = greedyAlgorithm.compute();
-        log.debug("Greedy result: " + greedyResult.toString());
-        // dfs algorithm
-        DfsAlgorithm dfsAlgorithm = ctxt.getBean(DfsAlgorithm.class);
-        AlgorithmResult dfsResult = dfsAlgorithm.compute();
-        log.debug("DFS result: " + dfsResult.toString());
+        dbFiller.fillFromJson("graphs/graph1_v2.json");
     }
 
     @Bean

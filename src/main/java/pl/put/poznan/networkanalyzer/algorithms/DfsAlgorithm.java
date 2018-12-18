@@ -1,9 +1,7 @@
 package pl.put.poznan.networkanalyzer.algorithms;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.stereotype.Service;
 import pl.put.poznan.networkanalyzer.model.Connection;
 import pl.put.poznan.networkanalyzer.model.Node;
 import pl.put.poznan.networkanalyzer.model.NodeType;
@@ -12,17 +10,11 @@ import pl.put.poznan.networkanalyzer.service.NodeService;
 import java.util.List;
 import java.util.Objects;
 
-@Service
 @Slf4j
-@Lazy
-public class DfsAlgorithm {
-    private NodeService nodeService;
+@RequiredArgsConstructor
+public class DfsAlgorithm implements AnalyzerAlgorithm {
+    private final NodeService nodeService;
     private AlgorithmResult bestResult;
-
-    @Autowired
-    public DfsAlgorithm(NodeService nodeService) {
-        this.nodeService = nodeService;
-    }
 
     public AlgorithmResult compute() {
         log.info("Running DFS algorithm");

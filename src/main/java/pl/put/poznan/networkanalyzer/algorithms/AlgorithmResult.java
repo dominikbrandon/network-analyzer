@@ -5,6 +5,13 @@ import lombok.ToString;
 import pl.put.poznan.networkanalyzer.model.Node;
 
 import java.util.LinkedList;
+/**
+ * Class used for storing the result of computing any kind of algorithm
+ *
+ * @author Kacper Maciejewski
+ * @version 1.0
+ * @since 1.0
+ */
 
 @ToString
 @NoArgsConstructor
