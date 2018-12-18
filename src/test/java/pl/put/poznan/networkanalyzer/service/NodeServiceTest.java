@@ -15,7 +15,7 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class NodeServiceTest {
@@ -61,13 +61,21 @@ public class NodeServiceTest {
         when(nodeRepository.findById(7L)).thenReturn(Optional.of(node));
 
         assertThat(nodeService.getById(7L)).isEqualTo(node);
-            }
+    }
 
     @Test
     public void getByType_whenNoNodesMatch_returnEmptyList() {
         when(nodeRepository.getByType(any())).thenReturn(Lists.emptyList());
 
         assertThat(nodeService.getByType(NodeType.ENTRY)).isEmpty();
+    }
+
+    @Test
+    public void save_whenNodeCorrect_saveIt() {
+        Node node1 = new Node();
+        node1.setId(2L);
+        nodeService.save(node1);
+        verify(nodeRepository, times(1)).saveAll(any());
     }
 
     @Test
