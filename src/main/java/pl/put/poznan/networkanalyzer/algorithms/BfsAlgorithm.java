@@ -75,7 +75,7 @@ public class BfsAlgorithm implements AnalyzerAlgorithm {
      * @return ENTRY or EXIT node
      */
 
-    public Node getNodeOfTypeWhenOnlyOneExists(NodeType type) {
+    private Node getNodeOfTypeWhenOnlyOneExists(NodeType type) {
         List<Node> entries = nodeService.getByType(type);
         if (entries.size() != 1) {
             throw new RuntimeException("There must be 1 node of type " + type + ", found: " + entries.size());
