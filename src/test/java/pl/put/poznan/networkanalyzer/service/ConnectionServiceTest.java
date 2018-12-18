@@ -7,13 +7,13 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import pl.put.poznan.networkanalyzer.model.Connection;
-import pl.put.poznan.networkanalyzer.model.ConnectionId;
-import pl.put.poznan.networkanalyzer.searching.ConnectionSearchParameters;
-import pl.put.poznan.networkanalyzer.searching.ConnectionSpecification;
 import pl.put.poznan.networkanalyzer.model.ConnectionDto;
+import pl.put.poznan.networkanalyzer.model.ConnectionId;
 import pl.put.poznan.networkanalyzer.model.Node;
 import pl.put.poznan.networkanalyzer.persistence.ConnectionRepository;
 import pl.put.poznan.networkanalyzer.persistence.NodeRepository;
+import pl.put.poznan.networkanalyzer.searching.ConnectionSearchParameters;
+import pl.put.poznan.networkanalyzer.searching.ConnectionSpecification;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.Collections;
@@ -32,7 +32,7 @@ public class ConnectionServiceTest {
 
     @Mock
     private NodeRepository nodeRepository;
-  
+
     @InjectMocks
     private ConnectionService connectionService;
 
@@ -90,6 +90,7 @@ public class ConnectionServiceTest {
         assertThatExceptionOfType(EntityNotFoundException.class).isThrownBy(() -> {
             connectionService.delete(2L, 3L);
         });
+    }
 
     @Test
     public void getAll_whenConnectionsFound_returnsThem() {

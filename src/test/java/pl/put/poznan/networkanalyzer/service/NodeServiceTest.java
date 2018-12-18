@@ -61,7 +61,7 @@ public class NodeServiceTest {
         when(nodeRepository.findById(7L)).thenReturn(Optional.of(node));
 
         assertThat(nodeService.getById(7L)).isEqualTo(node);
-            }
+    }
 
     @Test
     public void getByType_whenNoNodesMatch_returnEmptyList() {
@@ -76,6 +76,7 @@ public class NodeServiceTest {
         node1.setId(2L);
         nodeService.save(node1);
         verify(nodeRepository, times(1)).saveAll(any());
+    }
 
     @Test
     public void getByType_whenNodesFound_returnThem() {
