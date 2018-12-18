@@ -61,12 +61,24 @@ public class NodeServiceTest {
         when(nodeRepository.findById(7L)).thenReturn(Optional.of(node));
 
         assertThat(nodeService.getById(7L)).isEqualTo(node);
-    }
+            }
 
     @Test
     public void getByType_whenNoNodesMatch_returnEmptyList() {
         when(nodeRepository.getByType(any())).thenReturn(Lists.emptyList());
 
         assertThat(nodeService.getByType(NodeType.ENTRY)).isEmpty();
+    }
+
+    @Test
+    public void getByType_whenNodesFound_returnThem() {
+        Node node1 = new Node();
+        Node node2 = new Node();
+        node1.setType(NodeType.ENTRY);
+        node2.setType(NodeType.ENTRY);
+
+        when(nodeRepository.getByType(NodeType.ENTRY)).thenReturn(Lists.newArrayList(node1, node2));
+
+        assertThat(nodeService.getByType(NodeType.ENTRY)).containsExactlyInAnyOrder(node1, node2);
     }
 }

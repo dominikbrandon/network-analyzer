@@ -10,10 +10,25 @@ import pl.put.poznan.networkanalyzer.service.NodeService;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * Class used for computing BFS algorithm in order to
+ * receive path from ENTRY to EXIT
+ *
+ * @author Paweł Myszkowski
+ * @version 1.0
+ * @since 1.0
+ */
+
 @Slf4j
 @RequiredArgsConstructor
 public class BfsAlgorithm implements AnalyzerAlgorithm {
     private final NodeService nodeService;
+
+    /**
+     *Method which does all of the computation in a BFS way also prints to the log
+     * how much time it was computing
+     * @return list of nodes on the path and total cost if it
+     */
 
     public AlgorithmResult compute() {
         log.info("Running BFS algorithm");
@@ -53,6 +68,12 @@ public class BfsAlgorithm implements AnalyzerAlgorithm {
         log.info("Finished BFS algorithm in " + elapsedTime / 1000000 + " ms");
         return bestResult;
     }
+
+    /**
+     *Method which checks if graph is compliant - has one ENTRY and one EXIT
+     * @param type points if we are looking for ENTRY or EXIT
+     * @return ENTRY or EXIT node
+     */
 
     private Node getNodeOfTypeWhenOnlyOneExists(NodeType type) {
         List<Node> entries = nodeService.getByType(type);
