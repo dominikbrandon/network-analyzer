@@ -15,7 +15,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @Entity
 @Table(name = "CONNECTIONS")
-public class Connection extends ConnectionDto implements Serializable {
+public class Connection implements Serializable {
 
     @EmbeddedId
     private ConnectionId id;
